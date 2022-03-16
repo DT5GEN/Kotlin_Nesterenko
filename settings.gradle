@@ -16,4 +16,3 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Kotlin_1728_2_1"
 include ':app'
-include ':test'
