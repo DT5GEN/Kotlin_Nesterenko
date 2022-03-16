@@ -71,6 +71,9 @@ class MainActivity : AppCompatActivity() {
         Log.d("CAT", " Cat name ${cat.name} older ${cat.age}")
     }
 
+    val notes = NoteKotlin("", 1)
+    val copyNote = notes.copy("New")
+
     enum class WeatherType {
         SUNNY,
         RAINY,
