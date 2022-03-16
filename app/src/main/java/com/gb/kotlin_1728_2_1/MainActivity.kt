@@ -26,12 +26,34 @@ class MainActivity : AppCompatActivity() {
         Person.testPublicStaticFinal
         Person.testCompan()
 
+        var result = if (false) {
+            1
+        } else {
+            2
+        }
+        Log.d("TAG", "$result")
+
+       result =  when(WeatherType.CLOUDY){
+            WeatherType.SUNNY -> 1
+            WeatherType.RAINY -> 2
+            WeatherType.CLOUDY -> 3
+        }
+
+        Log.d("TAG", "$result")
+
         val cat = object {
             val name = "Kisa"
             val age = 3
         }
         Log.d("CAT", " Cat name ${cat.name} older ${cat.age}")
     }
+
+    enum class WeatherType {
+        SUNNY,
+        RAINY,
+        CLOUDY
+    }
+
 }
 
 
