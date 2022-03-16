@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val person = Person("noInit", 32)
         person.newProperty = ""
-        Log.d("TAG", "${person.newProperty}")
+        Log.d("TAG", person.newProperty)
 
         Repository.getData()
         val callback = object : View.OnClickListener {
