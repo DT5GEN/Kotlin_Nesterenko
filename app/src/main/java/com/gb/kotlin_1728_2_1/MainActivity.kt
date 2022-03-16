@@ -10,6 +10,7 @@ class MainActivity : AppCompatActivity() {
         // TODO создать проект в гит
         setContentView(R.layout.activity_main)
         val person = Person("noInit", 32)
+        person.newProperty= ""
         Log.d("TAG", "${person.newProperty}")
     }
 }
