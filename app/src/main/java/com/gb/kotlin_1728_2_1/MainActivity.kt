@@ -11,11 +11,11 @@ class MainActivity : AppCompatActivity() {
         // TODO создать проект в гит
         setContentView(R.layout.activity_main)
         val person = Person("noInit", 32)
-        person.newProperty= ""
+        person.newProperty = ""
         Log.d("TAG", "${person.newProperty}")
 
         Repository.getData()
-        val callback = object : View.OnClickListener{
+        val callback = object : View.OnClickListener {
             override fun onClick(p0: View?) {
                 TODO("Not yet implemented")
             }
@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         }
         Log.d("TAG", "$result")
 
-       result =  when(WeatherType.CLOUDY){
+        result = when (WeatherType.CLOUDY) {
             WeatherType.SUNNY -> 1
             WeatherType.RAINY -> 2
             WeatherType.CLOUDY -> 3
@@ -41,18 +41,27 @@ class MainActivity : AppCompatActivity() {
 
         Log.d("TAG", "$result")
 
-        for (i in 0..20 step 2){
+        for (i in 0..20 step 2) {
             Log.d("TAG", "$i")
         }
-        for (i in 0 until 20 step 5){
+        for (i in 0 until 20 step 5) {
             Log.d("TAG", "$i")
         }
-        for (i in 20 downTo 0 step 2){
+        for (i in 20 downTo 0 step 2) {
             Log.d("TAG", "$i")
         }
 
-        repeat(6){
-            Log.d("TAG", "${it+1}")
+        repeat(6) {
+            Log.d("TAG", "${it + 1}")
+        }
+
+        val dayzOfWeek =
+            listOf("sunday", "monday", "Tuesday", "Wednesday", "Thyrsday", "Friday", "Saturday")
+        dayzOfWeek.forEach{
+            Log.d("TAG", it)
+        }
+        for(day in dayzOfWeek) {
+            Log.d("TAG", day)
         }
 
         val cat = object {
