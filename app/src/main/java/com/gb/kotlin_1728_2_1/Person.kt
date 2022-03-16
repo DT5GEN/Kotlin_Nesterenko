@@ -16,6 +16,12 @@ open class Person constructor(val name: String, var age: Int = 28, var bio: Stri
         return age
     }
 
+    inner class InnerClass(){
+        fun foo():String {
+            return newProperty
+        }
+    }
+
 
 }
 
