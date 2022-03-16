@@ -3,6 +3,7 @@ package com.gb.kotlin_1728_2_1
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.gb.test.Test
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -12,6 +13,7 @@ class MainActivity : AppCompatActivity() {
         val person = Person("noInit", 32)
         person.newProperty= ""
         Log.d("TAG", "${person.newProperty}")
+        val test = Test()
     }
 }
 
