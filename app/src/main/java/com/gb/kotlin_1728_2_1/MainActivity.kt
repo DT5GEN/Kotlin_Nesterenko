@@ -41,6 +41,20 @@ class MainActivity : AppCompatActivity() {
 
         Log.d("TAG", "$result")
 
+        for (i in 0..20 step 2){
+            Log.d("TAG", "$i")
+        }
+        for (i in 0 until 20 step 5){
+            Log.d("TAG", "$i")
+        }
+        for (i in 20 downTo 0 step 2){
+            Log.d("TAG", "$i")
+        }
+
+        repeat(6){
+            Log.d("TAG", "${it+1}")
+        }
+
         val cat = object {
             val name = "Kisa"
             val age = 3
