@@ -2,6 +2,12 @@ package com.gb.kotlin_1728_2_1
 
 open class Person constructor(val name: String, var age: Int = 28, var bio: String = "") {
 
+    companion object {
+        val test = 23
+        const val testPublicStaticFinal = "dfg"
+        fun testCompan(){}
+    }
+
     var newProperty: String = "word"
     get() {
 
