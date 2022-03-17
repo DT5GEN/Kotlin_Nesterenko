@@ -1,9 +1,13 @@
-package com.gb.kotlin_1728_2_1
+package com.gb.kotlin_1728_2_1.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import com.gb.kotlin_1728_2_1.lesson1_reservation.NoteKotlin
+import com.gb.kotlin_1728_2_1.lesson1_reservation.Person
+import com.gb.kotlin_1728_2_1.R
+import com.gb.kotlin_1728_2_1.lesson1_reservation.Repository
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
