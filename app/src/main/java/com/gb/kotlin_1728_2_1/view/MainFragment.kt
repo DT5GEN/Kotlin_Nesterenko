@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -40,14 +39,15 @@ class MainFragment : Fragment() {
         viewModel.getWeatherFromServer()
     }
 
-    fun renderData(appState: AppState) {
+    private fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Error -> {
 
                 binding.loadingLayout.visibility = View.GONE
-                Snackbar.make(binding.mainView, "Error", Snackbar.LENGTH_LONG).setAction("Повторить запрос?"){
-                    viewModel.getWeatherFromServer()
-                }.show()
+                Snackbar.make(binding.mainView, "Error", Snackbar.LENGTH_LONG)
+                    .setAction("Повторить запрос?") {
+                        viewModel.getWeatherFromServer()
+                    }.show()
 
             }
 
@@ -69,7 +69,10 @@ class MainFragment : Fragment() {
             is AppState.Success -> {
 
                 binding.loadingLayout.visibility = View.GONE
-                Snackbar.make(binding.mainView, "Success", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(
+                    binding.mainView,
+                    "${appState.weatherData.feelsLike}", Snackbar.LENGTH_LONG
+                ).show()
             }
             is newErrors -> {
 
@@ -77,7 +80,7 @@ class MainFragment : Fragment() {
                 Snackbar.make(binding.mainView, "New Error", Snackbar.LENGTH_LONG).show()
             }
         }
-       // Toast.makeText(requireContext(), " < ВЫПОЛНЕНО! >  ", Toast.LENGTH_SHORT).show()
+        // Toast.makeText(requireContext(), " < ВЫПОЛНЕНО! >  ", Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroy() {
