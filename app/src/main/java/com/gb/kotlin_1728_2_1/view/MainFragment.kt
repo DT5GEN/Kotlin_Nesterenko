@@ -1,5 +1,6 @@
 package com.gb.kotlin_1728_2_1.view
 
+import android.os.Build.VERSION_CODES.S
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -35,7 +36,14 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
+        /* ниже сидит viewModel в ней сидит liveData, на эту liveData мы подписываемся.
+         Лайвдейте нужно знать жизненный цикл фрагмента через viewLifecycleOwner.
+         viewLifecycleOwner встроенный во фрагмент и а Активити он тоже встроен.
+         observe должен знать куда ему сообщать об изменениях ( тут сообщает в renderData)
+         renderData реализацию мы прописывает (рутина) */
         viewModel.getLivedata().observe(viewLifecycleOwner, Observer<AppState> { renderData(it) })
+
         viewModel.getWeatherFromServer()
     }
 
@@ -69,9 +77,13 @@ class MainFragment : Fragment() {
             is AppState.Success -> {
 
                 binding.loadingLayout.visibility = View.GONE
+                binding.cityName.text = appState.weatherData.city.name
+                binding.cityCoordinates.text =" ${ appState.weatherData.city.lat }  ${ appState.weatherData.city.lon }"
+                binding.temperatureValue.text = "${ appState.weatherData.temperature }"
+                binding.feelsLikeValue.text ="${ appState.weatherData.feelsLike }"
                 Snackbar.make(
                     binding.mainView,
-                    "${appState.weatherData.feelsLike}", Snackbar.LENGTH_LONG
+                    "Success", Snackbar.LENGTH_LONG
                 ).show()
             }
             is newErrors -> {
