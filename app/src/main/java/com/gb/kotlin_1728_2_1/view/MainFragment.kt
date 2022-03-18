@@ -12,6 +12,7 @@ import com.gb.kotlin_1728_2_1.databinding.FragmentMainBinding
 import com.gb.kotlin_1728_2_1.viewmodel.AppState
 import com.gb.kotlin_1728_2_1.viewmodel.MainViewModel
 import com.gb.kotlin_1728_2_1.viewmodel.newErrors
+import com.google.android.material.snackbar.Snackbar
 
 class MainFragment : Fragment() {
 
@@ -41,30 +42,42 @@ class MainFragment : Fragment() {
 
     fun renderData(appState: AppState) {
         when (appState) {
-            is AppState.Error -> Toast.makeText(
-                requireContext(),
-                appState.error.message,
-                Toast.LENGTH_SHORT
-            ).show()
+            is AppState.Error -> {
 
-            is AppState.Loading -> Toast.makeText(
-                requireContext(),
-                "${appState.progress}",
-                Toast.LENGTH_SHORT
-            ).show()
+                binding.loadingLayout.visibility = View.GONE
+                Snackbar.make(binding.mainView, "Error", Snackbar.LENGTH_LONG).setAction("Повторить запрос?"){
+                    viewModel.getWeatherFromServer()
+                }.show()
 
-            is AppState.Success -> Toast.makeText(
-                requireContext(),
-                appState.weatherData,
-                Toast.LENGTH_SHORT
-            ).show()
-            is newErrors -> Toast.makeText(
-                requireContext(),
-                appState.error.message,
-                Toast.LENGTH_SHORT
-            ).show()
+            }
+
+            is AppState.Loading -> {
+
+                binding.loadingLayout.visibility = View.VISIBLE
+
+
+            }
+
+//            Toast.makeText(
+//                requireContext(),
+//                "${appState.progress}",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//
+
+
+            is AppState.Success -> {
+
+                binding.loadingLayout.visibility = View.GONE
+                Snackbar.make(binding.mainView, "Success", Snackbar.LENGTH_LONG).show()
+            }
+            is newErrors -> {
+
+                binding.loadingLayout.visibility = View.GONE
+                Snackbar.make(binding.mainView, "New Error", Snackbar.LENGTH_LONG).show()
+            }
         }
-        Toast.makeText(requireContext(), " < ВЫПОЛНЕНО! >  ", Toast.LENGTH_SHORT).show()
+       // Toast.makeText(requireContext(), " < ВЫПОЛНЕНО! >  ", Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroy() {
