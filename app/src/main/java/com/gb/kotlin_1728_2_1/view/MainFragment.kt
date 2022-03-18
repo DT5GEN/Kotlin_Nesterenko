@@ -49,7 +49,7 @@ class MainFragment : Fragment() {
 
             is AppState.Loading -> Toast.makeText(
                 requireContext(),
-                appState.progress,
+                "${appState.progress}",
                 Toast.LENGTH_SHORT
             ).show()
 
