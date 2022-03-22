@@ -2,11 +2,9 @@ package com.gb.kotlin_1728_2_1.view
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.gb.kotlin_1728_2_1.R
 import com.gb.kotlin_1728_2_1.databinding.ActivityMainBinding
-import com.gb.kotlin_1728_2_1.lesson4.JavaLambda
 import com.gb.kotlin_1728_2_1.lesson4.LambdaKotlin
 import com.gb.kotlin_1728_2_1.view.main.MainFragment
 
@@ -23,37 +21,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, MainFragment.newInstance()).commit()
         }
-        binding.container.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(p0: View?) {
-                TODO("Not yet implemented")
-            }
-
-        })
-
-        val l = LambdaKotlin()
-        l.main()
-        l.setOnMyListener(object : LambdaKotlin.OnMyLisener {
-            override fun onSomething(string: String) {
-                TODO("что-то напишем ))")
-            }
-        })
-
-//        l.setOnMyListener(callback)
-//        l.setOnMyListener(callbackL)  FIXME не принимает лямбду, нужно чинить
-
-
-//        val l = JavaLambda()
-//            l.main()
-    }
-
-    val callback = object : LambdaKotlin.OnMyLisener { // объект анонимного класса
-        override fun onSomething(string: String) {
-            TODO("если кто-то передаст ссылку на анонимную функцию")
-        }
-
-
-    }
-    val callbackL = { string: String? ->
+        LambdaKotlin().main()
     }
 }
 

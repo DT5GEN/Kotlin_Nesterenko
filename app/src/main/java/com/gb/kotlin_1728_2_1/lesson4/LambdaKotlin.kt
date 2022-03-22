@@ -4,59 +4,27 @@ import android.util.Log
 
 class LambdaKotlin {
 
-    interface OnMyLisener {
-        fun onSomething(string: String)
+    fun  main() {
+      val str =  "String ( )"
+        val charCount= str.length
+        val charCount2= str.length()
+        Log.d("my log", "$charCount")
+        Log.d("my log", "$charCount2")
+        Log.d("my log", "${str.compareTo(str)}")
+        Log.d("my log", "${str.compareTo(str)}")
     }
-
-    var mOnMyLisener: OnMyLisener? = null
-    fun setOnMyListener(l: OnMyLisener?){
-        mOnMyLisener = l
-    }
-
-    fun  main(){
-      val l= anyText@  {  // благодаря указателю ххх@ появляется возможность в лямбде иметь несколько точек выхода (return xxx@)
-
-          Log.d("my logs", "run 1")
-          if (false)
-      return@anyText 2334234
-          else return@anyText 555
-      }
-        Log.d("my logs", "${l()} run 2")
-
-        anotherFun(lambdaFun, anonimFun)
-        val l3 = {
-            param1:String, param2:Int, param3:Float->
-            2+3
+    //fun String.charCount
+    fun String.length():Int{  // Экстеншн функция - инструмент, который помогает внедрить функцию свою новую в любой существующий класс
+        var counter = 0
+        for (ch in this){
+            if (ch !=' ') counter++
         }
-
-        mOnMyLisener?.onSomething("Стринга")
-
-        l3("", 34, 2f)
-
-
-
-
-
-        val textLambda = lambdaFun(54)
-        val textAnonim = anonimFun (1)
-
+        return counter
     }
 
-    fun anotherFun(bla1:(i:Int)-> String, blabla:(i:Int)-> String){
-        Log.d("my log", "anotherFun() called with")
-        Log.d("my log", "anotherFun() called with")
+    fun String.compareTo():Int{
+
+        return -1
     }
-
-    val  anonimFun = fun (i:Int):String{
-        Log.d("my log", " anonimFun $i")
-        return "22"
-    }
-
-    val lambdaFun =  {i: Int -> // лямбда не умеет получать явный указатель на возврвщаемый тип, компилятор сам этот тип выводит. И лямбла не может выходить сама из себя через ретёрн
-        Log.d("my log", " lambdaFun $i")
-        "45"
-    }
-
-
 
 }
