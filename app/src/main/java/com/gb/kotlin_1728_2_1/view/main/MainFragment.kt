@@ -106,13 +106,17 @@ class MainFragment : Fragment(), OnMyItemClickListener {
     }
 
     override fun onItemClick(weather: Weather) {
-        val bundle =
-            Bundle() // создаём контейнер, в который в котором будут данные передаваться и в него помещаем
-        bundle.putParcelable(BUNDLE_KEY, weather)  // погоду по ключу
-        requireActivity().supportFragmentManager.beginTransaction()
-            .add(R.id.container, DetailsFragment.newInstance(bundle))
-            .addToBackStack("")
-            .commit()
+        activity?.run{
+            // создаём контейнер, в который в котором будут данные передаваться и в него помещаем
+
+              // погоду по ключу
+            supportFragmentManager.beginTransaction()
+                .add(R.id.container, DetailsFragment.newInstance(Bundle().apply {
+                    putParcelable(BUNDLE_KEY, weather)
+                }))
+                .addToBackStack("")
+                .commit()
+        }
 
     }
 }
