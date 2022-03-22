@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         })
 
 //        l.setOnMyListener(callback)
-//        l.setOnMyListener(callbackL)  FIXME не принимает люмбду
+//        l.setOnMyListener(callbackL)  FIXME не принимает лямбду, нужно чинить
 
 
 //        val l = JavaLambda()
