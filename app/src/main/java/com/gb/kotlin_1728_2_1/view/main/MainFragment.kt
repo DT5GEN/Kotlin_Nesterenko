@@ -14,7 +14,6 @@ import com.gb.kotlin_1728_2_1.view.details.BUNDLE_KEY
 import com.gb.kotlin_1728_2_1.view.details.DetailsFragment
 import com.gb.kotlin_1728_2_1.viewmodel.AppState
 import com.gb.kotlin_1728_2_1.viewmodel.MainViewModel
-import com.gb.kotlin_1728_2_1.viewmodel.newErrors
 import com.google.android.material.snackbar.Snackbar
 
 class MainFragment : Fragment(), OnMyItemClickListener {
@@ -98,13 +97,13 @@ class MainFragment : Fragment(), OnMyItemClickListener {
                 is AppState.Success -> {
                     mainFragmentLoadingLayout.visibility = View.GONE
                     adapter.setWeather(appState.weatherData)
-                    Snackbar.make(
-                        root,
-                        "Success", Snackbar.LENGTH_LONG
-                    ).show()
+                    binding.root.withoutAction(getString(R.string.success), Snackbar.LENGTH_SHORT)
                 }
             }
         }
+    }
+    private fun View.withoutAction(text:String, length: Int){
+        Snackbar.make(this,text, length ).show()
     }
 
     override fun onDestroy() {
