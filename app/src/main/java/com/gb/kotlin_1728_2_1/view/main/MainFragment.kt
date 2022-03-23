@@ -82,12 +82,8 @@ class MainFragment : Fragment(), OnMyItemClickListener {
         {
             when (appState) {
                 is AppState.Error -> {
-
                     mainFragmentLoadingLayout.visibility = View.GONE
-                    Snackbar.make(root, "Error", Snackbar.LENGTH_LONG)
-                        .setAction("Повторить запрос?") {
-                            sentRequest()
-                        }.show()
+                    root.errorHandling(getString(R.string.errors),Snackbar.LENGTH_LONG)
                 }
 
                 is AppState.Loading -> {
@@ -97,14 +93,23 @@ class MainFragment : Fragment(), OnMyItemClickListener {
                 is AppState.Success -> {
                     mainFragmentLoadingLayout.visibility = View.GONE
                     adapter.setWeather(appState.weatherData)
-                    binding.root.withoutAction(getString(R.string.success), Snackbar.LENGTH_SHORT)
+                    root.withoutAction(getString(R.string.success), Snackbar.LENGTH_SHORT)
                 }
             }
         }
     }
+
+    private fun View.errorHandling(text:String, length: Int){
+        Snackbar.make(this,text, length )
+            .setAction(context.getString(R.string.repeat_request)) {
+                sentRequest()
+            }.show()
+    }
+
     private fun View.withoutAction(text:String, length: Int){
         Snackbar.make(this,text, length ).show()
     }
+
 
     override fun onDestroy() {
         super.onDestroy()

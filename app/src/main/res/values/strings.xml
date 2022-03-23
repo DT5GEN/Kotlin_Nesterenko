@@ -24,4 +24,6 @@
     <string name="dialog_address_title">Ваш адрес</string>
     <string name="dialog_address_get_weather">Узнать погоду</string>
     <string name="success">Success</string>
+    <string name="errors">Ошибка</string>
+    <string name="repeat_request">Повторить запрос?</string>
 </resources>
