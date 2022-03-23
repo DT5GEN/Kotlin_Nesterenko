@@ -25,71 +25,84 @@ class MainFragment : Fragment(), OnMyItemClickListener {
             return _binding!!
         }
 
-    private val adapter = MainFragmentAdapter(this)
+    private val adapter: MainFragmentAdapter by lazy {
+        // эффективность достигается, что пока не придёт Success с сервера, адаптер не будет связываться никаким образом
+        MainFragmentAdapter(this)
+    }
     private var isRussian = true
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
     }
 
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        binding.mainFragmentRecyclerView.adapter = adapter
-        /* ниже сидит viewModel в ней сидит liveData, на эту liveData мы подписываемся.
-         Лайвдейте нужно знать жизненный цикл фрагмента через viewLifecycleOwner.
-         viewLifecycleOwner встроенный во фрагмент и а Активити он тоже встроен.
-         observe должен знать куда ему сообщать об изменениях ( тут сообщает в renderData)
-         renderData реализацию мы прописывает (рутина) */
+        //  viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        initView()
         viewModel.getLivedata().observe(viewLifecycleOwner, Observer<AppState> { renderData(it) })
-
-        binding.mainFragmentFAB.setOnClickListener {
-            sentRequest()
-        }
         viewModel.getWeatherFromLocalSourceRus()
+    }
+
+    private fun initView() {
+        with(binding) {
+            mainFragmentRecyclerView.adapter = adapter
+            /* ниже сидит viewModel в ней сидит liveData, на эту liveData мы подписываемся.
+             Лайвдейте нужно знать жизненный цикл фрагмента через viewLifecycleOwner.
+             viewLifecycleOwner встроенный во фрагмент и а Активити он тоже встроен.
+             observe должен знать куда ему сообщать об изменениях ( тут сообщает в renderData)
+             renderData реализацию мы прописывает (рутина) */
+            mainFragmentFAB.setOnClickListener {
+                sentRequest()
+            }
+        }
     }
 
     private fun sentRequest() {
         isRussian = !isRussian // isRussian = if(isRussian) false else true
-        if (isRussian) {
-            viewModel.getWeatherFromLocalSourceRus()
-            binding.mainFragmentFAB.setImageResource(R.drawable.ic_russia)
-        } else {
-            viewModel.getWeatherFromLocalSourceWorld()
-            binding.mainFragmentFAB.setImageResource(R.drawable.ic_earth)
+        with(binding) {
+            if (isRussian) {
+                viewModel.getWeatherFromLocalSourceRus()
+                mainFragmentFAB.setImageResource(R.drawable.ic_russia)
+            } else {
+                viewModel.getWeatherFromLocalSourceWorld()
+                mainFragmentFAB.setImageResource(R.drawable.ic_earth)
+            }
         }
     }
 
     private fun renderData(appState: AppState) {
-        when (appState) {
-            is AppState.Error -> {
+        with(binding)
+        {
+            when (appState) {
+                is AppState.Error -> {
 
-                binding.mainFragmentLoadingLayout.visibility = View.GONE
-                Snackbar.make(binding.root, "Error", Snackbar.LENGTH_LONG)
-                    .setAction("Повторить запрос?") {
-                        sentRequest()
-                    }.show()
-            }
+                    mainFragmentLoadingLayout.visibility = View.GONE
+                    Snackbar.make(root, "Error", Snackbar.LENGTH_LONG)
+                        .setAction("Повторить запрос?") {
+                            sentRequest()
+                        }.show()
+                }
 
-            is AppState.Loading -> {
-                binding.mainFragmentLoadingLayout.visibility = View.VISIBLE
-            }
+                is AppState.Loading -> {
+                    mainFragmentLoadingLayout.visibility = View.VISIBLE
+                }
 
-            is AppState.Success -> {
-                binding.mainFragmentLoadingLayout.visibility = View.GONE
-                adapter.setWeather(appState.weatherData)
-                Snackbar.make(
-                    binding.root,
-                    "Success", Snackbar.LENGTH_LONG
-                ).show()
+                is AppState.Success -> {
+                    mainFragmentLoadingLayout.visibility = View.GONE
+                    adapter.setWeather(appState.weatherData)
+                    Snackbar.make(
+                        root,
+                        "Success", Snackbar.LENGTH_LONG
+                    ).show()
+                }
             }
         }
     }
@@ -106,10 +119,9 @@ class MainFragment : Fragment(), OnMyItemClickListener {
     }
 
     override fun onItemClick(weather: Weather) {
-        activity?.run{
+        activity?.run {
             // создаём контейнер, в который в котором будут данные передаваться и в него помещаем
-
-              // погоду по ключу
+            // погоду по ключу
             supportFragmentManager.beginTransaction()
                 .add(R.id.container, DetailsFragment.newInstance(Bundle().apply {
                     putParcelable(BUNDLE_KEY, weather)
@@ -117,6 +129,5 @@ class MainFragment : Fragment(), OnMyItemClickListener {
                 .addToBackStack("")
                 .commit()
         }
-
     }
 }

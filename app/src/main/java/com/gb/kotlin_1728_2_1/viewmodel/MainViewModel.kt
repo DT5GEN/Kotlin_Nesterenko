@@ -7,13 +7,13 @@ import com.gb.kotlin_1728_2_1.model.RepositoryImpl
 import java.lang.Thread.sleep
 
 class MainViewModel(
-    private val liveData: MutableLiveData<AppState> = MutableLiveData(),
-    private val repositoryImpl: RepositoryImpl = RepositoryImpl()
+    private val liveData: MutableLiveData<AppState> = MutableLiveData()
+
 ) :
     ViewModel() {
-    fun getLivedata(): LiveData<AppState> {
-        return liveData
-    }
+    private val repositoryImpl: RepositoryImpl by lazy { RepositoryImpl() }
+
+    fun getLivedata() = liveData
 
 
     fun getWeatherFromLocalSourceRus() = getWeatherFromLocalServer(isRussian = true)
@@ -31,21 +31,20 @@ class MainViewModel(
 
             sleep(2000)
 
-          //  val rand = (1..20).random()
-            if (true) {
+            //  val rand = (1..20).random()
+
                 liveData.postValue(
                     AppState.Success(
-                        if (isRussian) repositoryImpl.getWeatherFromLocalStorageRus()
-                        else repositoryImpl.getWeatherFromLocalStorageWorld()
+                        with(repositoryImpl)
+                        {
+                            if (isRussian) getWeatherFromLocalStorageRus()
+                            else getWeatherFromLocalStorageWorld()
+                        }
                     )
                 )
-            } else {
-               // liveData.postValue(AppState.Error(IllegalStateException("m( -__-)m")))
-            }
+            // liveData.postValue(AppState.Error(IllegalStateException("m( -__-)m")))
             // liveData.value(AppState.SUCCESS)                                        // асинхронный с главным потоком запрос
             // liveData.postValue(AppState.Success(" Холодно " , " Very cold " ))      // синхронный с главным потоком запрос
         }.start()
     }
-
-
 }

@@ -23,7 +23,7 @@ class DetailsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -33,37 +33,63 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val weather = arguments?.getParcelable<Weather>(BUNDLE_KEY)
-        if (weather != null) {
-
-            setWeatherData(weather)
-
+//        val weather = arguments?.getParcelable<Weather>(BUNDLE_KEY)
+//        if (weather != null) {      // первый вариант записи, который позволяет понять новичок ты или опытный
+//            setWeatherData(weather)
+//        }
+        arguments?.let {
+            it.getParcelable<Weather>(BUNDLE_KEY)?.run { setWeatherData(this) }
         }
 
     }
 
-    private fun setWeatherData(weather: Weather) {
-        binding.cityName.text = weather.city.name
-        binding.cityCoordinates.text =
-            " ${weather.city.lat}  ${weather.city.lon}"
-        binding.temperatureValue.text = "${weather.temperature}"
-        binding.feelsLikeValue.text = "${weather.feelsLike}"
-    }
+//    private fun setWeatherData(weather: Weather) {
+//        with(binding) {
+//            cityName.text = weather.city.name
+//            cityCoordinates.text = " ${weather.city.lat}  ${weather.city.lon}"
+//            temperatureValue.text = "${weather.temperature}"
+//            feelsLikeValue.text = "${weather.feelsLike}"
+//        }
+//    }
 
+    // можно ещё оптимизировыть функцию setWeatherData , но наглядность теряется
+
+    private fun setWeatherData(weather: Weather) {
+        with(binding) {
+            with(weather) {
+                cityName.text = city.name
+                cityCoordinates.text = " ${city.lat}  ${city.lon}"
+                temperatureValue.text = "$temperature"
+                feelsLikeValue.text = "$feelsLike"
+            }
+        }
+    }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
 
+//    companion object {
+//
+//        // @JvmStatic
+//        fun newInstance(bundle: Bundle): DetailsFragment { // в этом контейнере (бандле) будет сидеть Погода
+//            val fragment = DetailsFragment() // внутрь помещаем бандл
+//            fragment.arguments = bundle
+//            return fragment
+//
+//        }
+//    }
+
+
     companion object {
 
-        // @JvmStatic
-        fun newInstance(bundle: Bundle): DetailsFragment { // в этом контейнере (бандле) будет сидеть Погода
-            val fragment = DetailsFragment() // внутрь помещаем бандл
-            fragment.arguments = bundle
-            return fragment
-
-        }
+        fun newInstance(bundle: Bundle) = DetailsFragment().apply { arguments = bundle }
+        /*
+         создали фрагмент, получили его как ресивер ( через apply его получили )
+         { this.arguments = bundle } - this можно опустить
+        * */
     }
+
 }
+
