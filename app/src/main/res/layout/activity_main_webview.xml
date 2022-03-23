@@ -17,7 +17,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:inputType="textUri"
-            android:text="https://ya.ru/" />
+            android:text="https://youtu.be/" />
 
         <!-- Запрос на поиск нужной страницы -->
         <androidx.appcompat.widget.AppCompatButton
