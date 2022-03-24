@@ -67,6 +67,8 @@ class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoader {
             with(localWeather) {
                 cityName.text = city.name
                 cityCoordinates.text = " ${city.lat}  ${city.lon}"
+                // идентично
+                // cityCoordinates.text = " ${weatherDTO.info.lat}  ${weatherDTO.info.lon}"
                 temperatureValue.text = "${weatherDTO.fact.temp}"
                 feelsLikeValue.text = "${weatherDTO.fact.feelsLike}"
             }

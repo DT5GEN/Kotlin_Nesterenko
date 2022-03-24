@@ -28,6 +28,11 @@ class WeatherLoader(private val onWeatherLoader: OnWeatherLoader) {
             val bufferedReader =
                 BufferedReader(InputStreamReader(httpsURLConnection.inputStream))
             val weatherDTO: WeatherDTO? =
+                // данные с сервера JSON конвертируем из bufferedReader - буфера данных
+                // через конвертер в один большой String,
+                // далее используем импорт библиотеки в градле implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+                // всё это позволяет конвертировать большую строку в шаблон WeatherDTO::class.java
+                // и на выходе мы получаем объект типа WeatherDTO, который передадим дальше через callback OnWeatherLoader
                 Gson().fromJson(convertBufferToResult(bufferedReader), WeatherDTO::class.java)
             //Handler(Looper.getMainLooper()).post {
             MyApp.superHandler.post {  // вариант с супер Хендлером, но экономии памяти при этом нет
@@ -41,6 +46,7 @@ class WeatherLoader(private val onWeatherLoader: OnWeatherLoader) {
     }
 
     interface OnWeatherLoader {
+        // чтобы принять данные weatherDTO через интерфейс, имплементируем медоды в DetailsFragment
         fun onLoaded(weatherDTO: WeatherDTO?)
         fun onFailed() // TODO HW
     }

@@ -4,12 +4,14 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
+// данные полученные через программу Postman c сервера яндекса,
+// JSON конвертируем через сайт https://jsonformatter.org
 
 @Parcelize
 data class WeatherDTO (
     val now: Long,
 
-    @SerializedName( "now_dt")
+    @SerializedName( "now_dt") // это псевдоним для корректной и удобной работы
     val nowDt: String,
 
     val info: Info,
