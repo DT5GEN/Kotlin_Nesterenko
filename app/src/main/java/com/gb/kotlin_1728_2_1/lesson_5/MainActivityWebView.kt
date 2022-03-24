@@ -88,7 +88,7 @@ class MainActivityWebView : AppCompatActivity() {
     }
 
 
-        fun convertBufferToResult(bufferedReader: BufferedReader): String {
+        private fun convertBufferToResult(bufferedReader: BufferedReader): String {
             return bufferedReader.lines().collect(Collectors.joining("\n"))
         }
     }

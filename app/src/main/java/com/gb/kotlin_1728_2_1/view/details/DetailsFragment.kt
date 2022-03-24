@@ -1,17 +1,20 @@
 package com.gb.kotlin_1728_2_1.view.details
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.gb.kotlin_1728_2_1.databinding.FragmentDetailsBinding
 import com.gb.kotlin_1728_2_1.model.Weather
+import com.gb.kotlin_1728_2_1.model.WeatherDTO
+import com.gb.kotlin_1728_2_1.model.utils.WeatherLoader
 import com.gb.kotlin_1728_2_1.viewmodel.MainViewModel
 
 const val BUNDLE_KEY = "BUNDLE_KEY"
 
-class DetailsFragment : Fragment() {
+class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoader {
 
     private var _binding: FragmentDetailsBinding? = null
     private val binding: FragmentDetailsBinding
@@ -30,6 +33,8 @@ class DetailsFragment : Fragment() {
 
 
     private lateinit var viewModel: MainViewModel
+    private val weatherLoader = WeatherLoader(this)
+    lateinit var localWeather: Weather
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,7 +43,10 @@ class DetailsFragment : Fragment() {
 //            setWeatherData(weather)
 //        }
         arguments?.let {
-            it.getParcelable<Weather>(BUNDLE_KEY)?.run { setWeatherData(this) }
+            it.getParcelable<Weather>(BUNDLE_KEY)?.let {
+                localWeather = it
+                weatherLoader.loadWeather(it.city.lat, it.city.lon)
+            }
         }
 
     }
@@ -54,13 +62,13 @@ class DetailsFragment : Fragment() {
 
     // можно ещё оптимизировыть функцию setWeatherData , но наглядность теряется
 
-    private fun setWeatherData(weather: Weather) {
+    private fun setWeatherData(weatherDTO: WeatherDTO) {
         with(binding) {
-            with(weather) {
+            with(localWeather) {
                 cityName.text = city.name
                 cityCoordinates.text = " ${city.lat}  ${city.lon}"
-                temperatureValue.text = "$temperature"
-                feelsLikeValue.text = "$feelsLike"
+                temperatureValue.text = "${weatherDTO.fact.temp}"
+                feelsLikeValue.text = "${weatherDTO.fact.feelsLike}"
             }
         }
     }
@@ -89,6 +97,16 @@ class DetailsFragment : Fragment() {
          создали фрагмент, получили его как ресивер ( через apply его получили )
          { this.arguments = bundle } - this можно опустить
         * */
+    }
+
+    override fun onLoaded(weatherDTO: WeatherDTO?) {
+        weatherDTO?.let {
+            setWeatherData(weatherDTO)
+        }
+    }
+
+    override fun onFailed() {
+       // TODO("Дома доработать")
     }
 
 }
