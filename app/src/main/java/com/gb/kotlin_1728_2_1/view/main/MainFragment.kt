@@ -99,7 +99,7 @@ class MainFragment : Fragment(), OnMyItemClickListener {
         }
     }
 
-    private fun View.errorHandling(text:String, length: Int){
+    fun View.errorHandling(text:String, length: Int){
         Snackbar.make(this,text, length )
             .setAction(context.getString(R.string.repeat_request)) {
                 sentRequest()

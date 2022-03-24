@@ -1,7 +1,6 @@
 package com.gb.kotlin_1728_2_1.view.details
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -108,7 +107,7 @@ class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoader {
     }
 
     override fun onFailed() {
-       // TODO("Дома доработать")
+        // TODO("Дома доработать")
     }
 
 }
