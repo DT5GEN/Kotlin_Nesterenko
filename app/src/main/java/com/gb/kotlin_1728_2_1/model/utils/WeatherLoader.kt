@@ -2,6 +2,7 @@ package com.gb.kotlin_1728_2_1.model.utils
 
 import android.os.Handler
 import android.os.Looper
+import com.gb.kotlin_1728_2_1.BuildConfig
 import com.gb.kotlin_1728_2_1.lesson_5.MyApp
 import com.gb.kotlin_1728_2_1.model.WeatherDTO
 import com.google.gson.Gson
@@ -21,7 +22,7 @@ class WeatherLoader(private val onWeatherLoader: OnWeatherLoader) {
             val httpsURLConnection = (url.openConnection() as HttpsURLConnection).apply {
                 requestMethod = "GET"
                 readTimeout = 2000
-                addRequestProperty("X-Yandex-API-Key", "6437dc2c-577b-4ac2-832e-b592cc28307e")
+                addRequestProperty("X-Yandex-API-Key", BuildConfig.WEATHER_API_KEY)
             }
 
             val bufferedReader =
