@@ -34,7 +34,7 @@ class WeatherLoader(private val onWeatherLoader: OnWeatherLoader) {
                     // через конвертер в один большой String,
                     // далее используем импорт библиотеки в градле implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
                     // всё это позволяет конвертировать большую строку в шаблон WeatherDTO::class.java
-                        // и на выходе мы получаем объект типа WeatherDTO, который передадим дальше через callback OnWeatherLoader
+                    // и на выходе мы получаем объект типа WeatherDTO, который передадим дальше через callback OnWeatherLoader
                         Gson().fromJson(
                             convertBufferToResult(bufferedReader),
                             WeatherDTO::class.java
