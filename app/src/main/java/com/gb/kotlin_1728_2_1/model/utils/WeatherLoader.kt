@@ -2,6 +2,7 @@ package com.gb.kotlin_1728_2_1.model.utils
 
 import android.os.Handler
 import android.os.Looper
+import com.gb.kotlin_1728_2_1.lesson_5.MyApp
 import com.gb.kotlin_1728_2_1.model.WeatherDTO
 import com.google.gson.Gson
 import java.io.BufferedReader
@@ -14,7 +15,7 @@ class WeatherLoader(private val onWeatherLoader: OnWeatherLoader) {
 
     fun loadWeather(lat: Double, lon: Double) {
 
-        Thread {
+        Thread {  // TODO обернуть в try catch finally
 
             val url = URL("https://api.weather.yandex.ru/v2/informers?lat=$lat&lon=$lon")
             val httpsURLConnection = (url.openConnection() as HttpsURLConnection).apply {
@@ -27,7 +28,8 @@ class WeatherLoader(private val onWeatherLoader: OnWeatherLoader) {
                 BufferedReader(InputStreamReader(httpsURLConnection.inputStream))
             val weatherDTO: WeatherDTO? =
                 Gson().fromJson(convertBufferToResult(bufferedReader), WeatherDTO::class.java)
-            Handler(Looper.getMainLooper()).post {
+            //Handler(Looper.getMainLooper()).post {
+            MyApp.superHandler.post {  // вариант с супер Хендлером, но экономии памяти при этом нет
                 onWeatherLoader.onLoaded(weatherDTO)
             }
         }.start()
