@@ -7,6 +7,6 @@ import android.util.Log
 
 class MyBroadcastReceiver:BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d("mylogs2", "onReceive() ${intent?.action} ${intent?.getStringExtra(MAIN_SERVICE_KEY_EXTRAS)}")
+        Log.d("mylogs", "onReceive() ${intent?.action} ${intent?.getStringExtra(MAIN_SERVICE_KEY_EXTRAS)}")
     }
 }

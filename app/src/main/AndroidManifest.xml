@@ -29,6 +29,15 @@
 
         </service>
 
+        <receiver
+            android:enabled="true"
+            android:exported="true"
+            android:name=".lesson6.MyBroadcastReceiver">
+
+
+        </receiver>
+
+
         <activity
             android:name=".lesson_5.MainActivityWebView"
             android:exported="true">
