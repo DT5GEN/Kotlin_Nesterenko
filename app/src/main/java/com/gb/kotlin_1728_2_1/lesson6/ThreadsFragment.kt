@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,6 +37,7 @@ class ThreadsFragment : Fragment() {
                 val result = startCalculations(3)  // задача вне UI потока
                 activity?.let{ activity->
                     Handler(Looper.getMainLooper()).post {
+                        Log.d("thread", "происходит потребление памяти")
                         binding.mainContainer.addView(TextView(activity).apply {
                             text = result
                         })
@@ -63,7 +65,7 @@ class ThreadsFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         myThread.handler?.removeCallbacksAndMessages(null)
-        _binding = null
+              _binding = null
     }
 
     override fun onCreateView(

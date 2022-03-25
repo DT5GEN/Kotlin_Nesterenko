@@ -16,7 +16,7 @@ class MyService(name:String=""): IntentService(name) {
     }
 
     override fun onHandleIntent(intent: Intent?) {
-        createLogMessage("onHandleIntent ${intent?.getStringExtra(MAIN_SERVICE_KEY_EXTRAS)}")
+        createLogMessage("onHandle Intent ${intent?.getStringExtra(MAIN_SERVICE_KEY_EXTRAS)}")
     }
 
     override fun onCreate() {

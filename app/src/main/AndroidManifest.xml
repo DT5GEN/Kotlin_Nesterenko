@@ -25,6 +25,10 @@
             </intent-filter>
 
         </activity>
+        <service android:name=".lesson6.MyService">
+
+        </service>
+
         <activity
             android:name=".lesson_5.MainActivityWebView"
             android:exported="true">
