@@ -1,17 +1,21 @@
 package com.gb.kotlin_1728_2_1.view.details
 
+import android.content.BroadcastReceiver
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.gb.kotlin_1728_2_1.databinding.FragmentDetailsBinding
+import com.gb.kotlin_1728_2_1.lesson6.MyBroadcastReceiver
 import com.gb.kotlin_1728_2_1.model.Weather
 import com.gb.kotlin_1728_2_1.model.WeatherDTO
 import com.gb.kotlin_1728_2_1.model.utils.WeatherLoader
 import com.gb.kotlin_1728_2_1.viewmodel.MainViewModel
 
 const val BUNDLE_KEY = "BUNDLE_KEY"
+const val BUNDLE_KEY_WEATHER = "key_weather"
+const val BROADCAST_KEY = "key_"
 
 class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoader {
 
@@ -20,6 +24,8 @@ class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoader {
         get() {
             return _binding!!
         }
+
+    val receiver:BroadcastReceiver =
 
 
     override fun onCreateView(
