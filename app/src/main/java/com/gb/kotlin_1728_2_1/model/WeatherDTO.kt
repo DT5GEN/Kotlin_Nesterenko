@@ -11,7 +11,7 @@ import kotlinx.android.parcel.Parcelize
 data class WeatherDTO (
     val now: Long,
 
-    @SerializedName( "now_dt") // это псевдоним для корректной и удобной работы
+    @SerializedName( "now_dt")
     val nowDt: String,
 
     val info: Info,
@@ -52,7 +52,7 @@ data class Fact (
 
     @SerializedName("wind_gust")
     val windGust: Double
-): Parcelable
+):Parcelable
 
 @Parcelize
 data class Forecast (

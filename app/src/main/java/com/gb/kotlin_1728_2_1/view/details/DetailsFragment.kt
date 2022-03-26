@@ -5,25 +5,26 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.gb.kotlin_1728_2_1.databinding.FragmentDetailsBinding
-import com.gb.kotlin_1728_2_1.lesson6.MyService
 import com.gb.kotlin_1728_2_1.model.Weather
 import com.gb.kotlin_1728_2_1.model.WeatherDTO
 import com.gb.kotlin_1728_2_1.model.utils.WeatherLoader
-import com.gb.kotlin_1728_2_1.viewmodel.MainViewModel
 
-const val BUNDLE_KEY = "BUNDLE_KEY"
-const val BUNDLE_KEY_WEATHER = "key_weather"
-const val BUNDLE_KEY_LON = "key_lon"
-const val BUNDLE_KEY_LAT = "key_lan"
+const val BUNDLE_KEY = "key"
+const val BUNDLE_KEY_WEATHER = "key_weather_dto"
+const val LATITUDE_EXTRA = "Latitude"
+const val LONGITUDE_EXTRA = "Longitude"
+const val DETAILS_INTENT_FILTER = "DETAILS INTENT FILTER"
 const val BROADCAST_ACTION = "key_"
 
-class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoader {
+class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoaded {
+
 
     private var _binding: FragmentDetailsBinding? = null
     private val binding: FragmentDetailsBinding
@@ -32,15 +33,58 @@ class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoader {
         }
 
     private val receiver: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(p0: Context?, intent: Intent?) {
+        override fun onReceive(context: Context?, intent: Intent?) {
             intent?.let {
-                it.getParcelableExtra<WeatherDTO>(BUNDLE_KEY_WEATHER)?.let {
-                    setWeatherData(it)
+                val weatherDTO = it.getParcelableExtra<WeatherDTO>(BUNDLE_KEY_WEATHER)
+                if (weatherDTO != null) {
+                    setWeatherData(weatherDTO)
+                } else {
+                    // HW ERROR
                 }
+            }
+
+        }
+    }
+
+    lateinit var localWeather: Weather
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        arguments?.let {
+            it.getParcelable<Weather>(BUNDLE_KEY)?.let {
+                localWeather = it
+                val intent = Intent(requireActivity(), DetailsService::class.java)
+                intent.putExtra(LATITUDE_EXTRA, localWeather.city.lat)
+                intent.putExtra(LONGITUDE_EXTRA, localWeather.city.lon)
+                requireActivity().startService(intent)
+                LocalBroadcastManager.getInstance(requireActivity())
+                    .registerReceiver(receiver, IntentFilter(DETAILS_INTENT_FILTER))
+            }
+        }
+
+
+    }
+
+    private fun setWeatherData(weatherDTO: WeatherDTO) {
+
+        with(binding) {
+            with(localWeather) {
+                cityName.text = city.name
+                cityCoordinates.text =
+                    "${city.lat} ${city.lon}"
+                temperatureValue.text = "${weatherDTO.fact.temp}"
+                feelsLikeValue.text = "${weatherDTO.fact.feelsLike}"
             }
         }
     }
 
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+        LocalBroadcastManager.getInstance(requireActivity())
+            .unregisterReceiver(receiver)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,101 +94,18 @@ class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoader {
         return binding.root
     }
 
-
-    private lateinit var viewModel: MainViewModel
-
-    lateinit var localWeather: Weather
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-//        val weather = arguments?.getParcelable<Weather>(BUNDLE_KEY)
-//        if (weather != null) {      // первый вариант записи, который позволяет понять новичок ты или опытный
-//            setWeatherData(weather)
-//        }
-        arguments?.let {
-            it.getParcelable<Weather>(BUNDLE_KEY)?.let {
-                localWeather = it
-
-                requireActivity().startService(
-                    Intent(
-                        requireActivity(),
-                        DetailsService::class.java
-                    ).apply {
-                        putExtra(BUNDLE_KEY_LAT, it.city.lat)
-                        putExtra(BUNDLE_KEY_LON, it.city.lon)
-                    })
-
-                // TODO need services
-            }
-        }
-// регистрация глобального приёмника
- requireActivity().registerReceiver(receiver, IntentFilter(BROADCAST_ACTION) )
-            // регистрация приёмника в рамках приложения
-//        LocalBroadcastManager.getInstance(requireContext())
-//            .registerReceiver(receiver, IntentFilter(BROADCAST_ACTION))
-
-
-    }
-
-//    private fun setWeatherData(weather: Weather) {
-//        with(binding) {
-//            cityName.text = weather.city.name
-//            cityCoordinates.text = " ${weather.city.lat}  ${weather.city.lon}"
-//            temperatureValue.text = "${weather.temperature}"
-//            feelsLikeValue.text = "${weather.feelsLike}"
-//        }
-//    }
-
-    // можно ещё оптимизировыть функцию setWeatherData , но наглядность теряется
-
-    private fun setWeatherData(weatherDTO: WeatherDTO) {
-        with(binding) {
-            with(localWeather) {
-                cityName.text = city.name
-                cityCoordinates.text = " ${city.lat}  ${city.lon}"
-                // идентично
-                // cityCoordinates.text = " ${weatherDTO.info.lat}  ${weatherDTO.info.lon}"
-                temperatureValue.text = "${weatherDTO.fact.temp}"
-                feelsLikeValue.text = "${weatherDTO.fact.feelsLike}"
-            }
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
-
-//    companion object {
-//
-//        // @JvmStatic
-//        fun newInstance(bundle: Bundle): DetailsFragment { // в этом контейнере (бандле) будет сидеть Погода
-//            val fragment = DetailsFragment() // внутрь помещаем бандл
-//            fragment.arguments = bundle
-//            return fragment
-//
-//        }
-//    }
-
-
     companion object {
-
         fun newInstance(bundle: Bundle) = DetailsFragment().apply { arguments = bundle }
-        /*
-         создали фрагмент, получили его как ресивер ( через apply его получили )
-         { this.arguments = bundle } - this можно опустить
-        * */
     }
 
     override fun onLoaded(weatherDTO: WeatherDTO?) {
         weatherDTO?.let {
             setWeatherData(weatherDTO)
         }
+        Log.d("", "")
     }
 
     override fun onFailed() {
-        // TODO("Дома доработать")
+        //TODO HW
     }
-
 }
-

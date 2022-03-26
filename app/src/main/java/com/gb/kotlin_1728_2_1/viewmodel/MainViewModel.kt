@@ -23,31 +23,22 @@ class MainViewModel(
 
     fun getWeatherFromRemoteSource() =
         getWeatherFromLocalServer(isRussian = true) //заглушка на 5й урок
-
     fun getWeatherFromLocalServer(isRussian: Boolean) {
-        liveData.postValue(AppState.Loading(50))
+        liveData.postValue(AppState.Loading(0))
         Thread {
-
-            sleep(2000)
-
-             val rand = (1..20).random()
-            if (rand > 5) {
-
-                liveData.postValue(
-                    AppState.Success(
-                        with(repositoryImpl)
-                        {
-                            if (isRussian) getWeatherFromLocalStorageRus()
-                            else getWeatherFromLocalStorageWorld()
+            sleep(1000)
+            val rand = (1..40).random()
+            liveData.postValue(
+                AppState.Success(
+                    with(repositoryImpl) {
+                        if (isRussian) {
+                            getWeatherFromLocalStorageRus()
+                        } else {
+                            getWeatherFromLocalStorageWorld()
                         }
-                    )
+                    }
                 )
-            } else {
-                liveData.postValue(AppState.Error(IllegalStateException("m( -__-)m")))
-            }
-            // liveData.postValue(AppState.Error(IllegalStateException("m( -__-)m")))
-            // liveData.value(AppState.SUCCESS)                                        // асинхронный с главным потоком запрос
-            // liveData.postValue(AppState.Success(" Холодно " , " Very cold " ))      // синхронный с главным потоком запрос
+            )
         }.start()
     }
 }
