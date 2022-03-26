@@ -1,13 +1,17 @@
 package com.gb.kotlin_1728_2_1.view.details
 
 import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.gb.kotlin_1728_2_1.databinding.FragmentDetailsBinding
-import com.gb.kotlin_1728_2_1.lesson6.MyBroadcastReceiver
+import com.gb.kotlin_1728_2_1.lesson6.MyService
 import com.gb.kotlin_1728_2_1.model.Weather
 import com.gb.kotlin_1728_2_1.model.WeatherDTO
 import com.gb.kotlin_1728_2_1.model.utils.WeatherLoader
@@ -15,7 +19,9 @@ import com.gb.kotlin_1728_2_1.viewmodel.MainViewModel
 
 const val BUNDLE_KEY = "BUNDLE_KEY"
 const val BUNDLE_KEY_WEATHER = "key_weather"
-const val BROADCAST_KEY = "key_"
+const val BUNDLE_KEY_LON = "key_lon"
+const val BUNDLE_KEY_LAT = "key_lan"
+const val BROADCAST_ACTION = "key_"
 
 class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoader {
 
@@ -25,7 +31,15 @@ class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoader {
             return _binding!!
         }
 
-    val receiver:BroadcastReceiver =
+    private val receiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(p0: Context?, intent: Intent?) {
+            intent?.let {
+                it.getParcelableExtra<WeatherDTO>(BUNDLE_KEY_WEATHER)?.let {
+                    setWeatherData(it)
+                }
+            }
+        }
+    }
 
 
     override fun onCreateView(
@@ -38,7 +52,7 @@ class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoader {
 
 
     private lateinit var viewModel: MainViewModel
-    private val weatherLoader = WeatherLoader(this)
+
     lateinit var localWeather: Weather
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,9 +64,25 @@ class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoader {
         arguments?.let {
             it.getParcelable<Weather>(BUNDLE_KEY)?.let {
                 localWeather = it
-                weatherLoader.loadWeather(it.city.lat, it.city.lon)
+
+                requireActivity().startService(
+                    Intent(
+                        requireActivity(),
+                        DetailsService::class.java
+                    ).apply {
+                        putExtra(BUNDLE_KEY_LAT, it.city.lat)
+                        putExtra(BUNDLE_KEY_LON, it.city.lon)
+                    })
+
+                // TODO need services
             }
         }
+// регистрация глобального приёмника
+ requireActivity().registerReceiver(receiver, IntentFilter(BROADCAST_ACTION) )
+            // регистрация приёмника в рамках приложения
+//        LocalBroadcastManager.getInstance(requireContext())
+//            .registerReceiver(receiver, IntentFilter(BROADCAST_ACTION))
+
 
     }
 
