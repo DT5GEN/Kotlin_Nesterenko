@@ -14,8 +14,8 @@ import com.gb.kotlin_1728_2_1.lesson6.MyBroadcastReceiver
 import com.gb.kotlin_1728_2_1.lesson6.MyService
 import com.gb.kotlin_1728_2_1.lesson6.MyWorker
 import com.gb.kotlin_1728_2_1.model.WeatherDTO
-import com.gb.kotlin_1728_2_1.view.details.BUNDLE_KEY
-import com.gb.kotlin_1728_2_1.view.details.BUNDLE_KEY_WEATHER
+import com.gb.kotlin_1728_2_1.model.utils.BUNDLE_KEY
+import com.gb.kotlin_1728_2_1.model.utils.BUNDLE_KEY_WEATHER
 import com.gb.kotlin_1728_2_1.view.details.DetailsFragment
 import com.gb.kotlin_1728_2_1.view.main.MainFragment
 import java.util.concurrent.TimeUnit
