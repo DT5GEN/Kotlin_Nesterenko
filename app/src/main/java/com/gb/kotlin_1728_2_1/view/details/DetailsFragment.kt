@@ -6,11 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import coil.load
+import com.bumptech.glide.Glide
 import com.gb.kotlin_1728_2_1.databinding.FragmentDetailsBinding
 import com.gb.kotlin_1728_2_1.model.Weather
 import com.gb.kotlin_1728_2_1.model.utils.BUNDLE_KEY
 import com.gb.kotlin_1728_2_1.viewmodel.AppState
 import com.gb.kotlin_1728_2_1.viewmodel.DetailsViewModel
+import com.squareup.picasso.Picasso
 import okhttp3.OkHttpClient
 
 
@@ -78,6 +81,16 @@ class DetailsFragment : Fragment(){
                     "${city.lat} ${city.lon}"
                 temperatureValue.text = "${weather.temperature}"
                 feelsLikeValue.text = "${weather.feelsLike}"
+
+//                Glide.with(requireActivity())
+//                    .load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")
+//                    .into(headerIcon)
+//
+//                Picasso.get()
+//                    .load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")
+//                    .into(headerIcon)
+
+                headerIcon.load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")
             }
         }
     }
