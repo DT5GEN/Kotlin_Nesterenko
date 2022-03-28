@@ -21,8 +21,6 @@ class MainViewModel(
         false
     )
 
-    fun getWeatherFromRemoteSource() =
-        getWeatherFromLocalServer(isRussian = true) //заглушка на 5й урок
     fun getWeatherFromLocalServer(isRussian: Boolean) {
         liveData.postValue(AppState.Loading(0))
         Thread {
