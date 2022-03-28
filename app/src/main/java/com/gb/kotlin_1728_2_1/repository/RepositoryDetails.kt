@@ -1,7 +1,7 @@
 package com.gb.kotlin_1728_2_1.repository
 
-import okhttp3.Callback
+import com.gb.kotlin_1728_2_1.model.WeatherDTO
 
 interface RepositoryDetails {
-    fun getWeatherFromServer(url:String , callback: Callback)
+    fun getWeatherFromServer(lat: Double, lon: Double,callback: retrofit2.Callback<WeatherDTO>)
 }
