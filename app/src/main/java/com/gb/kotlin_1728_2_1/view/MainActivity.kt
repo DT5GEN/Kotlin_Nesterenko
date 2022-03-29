@@ -18,6 +18,7 @@ import com.gb.kotlin_1728_2_1.lesson6.MyWorker
 import com.gb.kotlin_1728_2_1.model.WeatherDTO
 import com.gb.kotlin_1728_2_1.model.utils.BUNDLE_KEY
 import com.gb.kotlin_1728_2_1.model.utils.BUNDLE_KEY_WEATHER
+import com.gb.kotlin_1728_2_1.room.App
 import com.gb.kotlin_1728_2_1.view.details.DetailsFragment
 import com.gb.kotlin_1728_2_1.view.main.MainFragment
 import java.util.concurrent.TimeUnit
@@ -25,7 +26,6 @@ import java.util.concurrent.TimeUnit
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
-
     private val receiver = MyBroadcastReceiver()
     @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,25 +66,7 @@ class MainActivity : AppCompatActivity() {
         editor.putBoolean("key4", false)
         editor.apply()
 
-//        startService(Intent(this, MyService::class.java).apply {
-//            putExtra(MAIN_SERVICE_KEY_EXTRAS,"HEllo")
-//        })
-//
-//        val manager = WorkManager.getInstance(this)
-//        val worker = OneTimeWorkRequest.Builder(MyWorker::class.java)
-//            .setInitialDelay(5, TimeUnit.SECONDS)
-//            .build()
-//        manager.enqueue(worker)
-//        //manager.cancelWorkById(worker.id)
-//        //manager.cancelAllWorkByTag()
-//        //manager.cancelAllWork()
-//
-//        registerReceiver(receiver, IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED))
-//        registerReceiver(receiver, IntentFilter("myAction"))
-//
-//        sendBroadcast(Intent("myAction").apply {
-//            putExtra(MAIN_SERVICE_KEY_EXTRAS, "HEllo")
-//        })
+       val listWeather =  App.getHistoryWeatherDAO().getAllHistoryWeather()
     }
 
     override fun onDestroy() {
@@ -92,24 +74,6 @@ class MainActivity : AppCompatActivity() {
         unregisterReceiver(receiver)
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        menuInflater.inflate(R.menu.main_screen_menu, menu)
-//        return super.onCreateOptionsMenu(menu)
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        return when (item.itemId){
-//                     R.id.menu_threads->{
-//                         supportFragmentManager.beginTransaction()
-//                             .add(R.id.container, ThreadsFragment.newInstance())
-//                             .addToBackStack("").commit()
-//            true
-//        } else ->{
-//             super.onOptionsItemSelected(item)
-//         }
-//
-//        }
-//    }
 }
 
 
