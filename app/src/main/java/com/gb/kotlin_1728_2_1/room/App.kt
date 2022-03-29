@@ -2,7 +2,7 @@ package com.gb.kotlin_1728_2_1.room
 
 import android.app.Application
 import androidx.room.Room
-import java.util.IllformedLocaleException
+import java.util.*
 
 class App: Application() {
     override fun onCreate() {

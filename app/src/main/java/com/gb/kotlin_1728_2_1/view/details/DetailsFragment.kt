@@ -57,7 +57,8 @@ class DetailsFragment : Fragment() {
     }
 
 
-    private lateinit var localWeather: Weather
+    private lateinit var localWeather: Weather  // создали localWeather, чтобы хранить ту погоду, которая пришла по клику на список из майнФрагмента
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getLivedata().observe(viewLifecycleOwner, {
@@ -77,6 +78,10 @@ class DetailsFragment : Fragment() {
     private fun setWeatherData(weather: Weather) {
 
         with(binding) {
+            //weatherIcon.setOnClickListener {
+                weather.city = localWeather.city
+                viewModel.saveWeather(weather)
+         //   }
             with(localWeather) {
                 cityName.text = city.name
                 cityCoordinates.text =
@@ -96,7 +101,13 @@ class DetailsFragment : Fragment() {
 
                 weatherIcon.loadUrl("https://yastatic.net/weather/i/icons/funky/dark/${weather.icon}.svg")
             }
+
+
+
         }
+
+
+
     }
 
     private fun ImageView.loadUrl(url: String) {

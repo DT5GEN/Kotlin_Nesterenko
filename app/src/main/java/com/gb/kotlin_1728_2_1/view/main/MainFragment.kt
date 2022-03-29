@@ -24,9 +24,9 @@ class MainFragment : Fragment(), OnMyItemClickListener {
             return _binding!!
         }
 
-    private val adapter: MainFragmentAdapter by lazy {
+    private val adapter: CitiesAdapter by lazy {
         // эффективность достигается, что пока не придёт Success с сервера, адаптер не будет связываться никаким образом
-        MainFragmentAdapter(this)
+        CitiesAdapter(this)
     }
     private var isRussian = true
 
