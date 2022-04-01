@@ -25,7 +25,7 @@ class App: Application() {
                         HistoryDatabase::class.java,
                         DB_NAME
                     )
-                        .allowMainThreadQueries()  // TODO  заверяем систему, что не сильно навредим главному потоку :)
+                       // .allowMainThreadQueries()  // TODO  заверяем систему, что не сильно навредим главному потоку :) (решено!)
                         .build()
                 }
             }
