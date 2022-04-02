@@ -10,7 +10,7 @@
     <string name="reload">Reload</string>
     <string name="authorities">com.gb.kotlin_1728_2_1.EducationContentProvider</string>
 
-<!-- lesson 10-->
+    <!-- lesson 10-->
     <string name="dialog_button_close">Закрыть</string>
     <string name="dialog_title_no_gps">Доступ к геолокации закрыт</string>
     <string name="dialog_message_no_gps">Разрешите доступ к геолокации, если хотите узнать погоду текущего места</string>

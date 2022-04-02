@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.gb.kotlin_1728_2_1.R
 import com.gb.kotlin_1728_2_1.databinding.ActivityMainBinding
 import com.gb.kotlin_1728_2_1.lesson6.MyBroadcastReceiver
+import com.gb.kotlin_1728_2_1.lesson9.ContentProviderFragment
 import com.gb.kotlin_1728_2_1.model.WeatherDTO
 import com.gb.kotlin_1728_2_1.model.utils.BUNDLE_KEY
 import com.gb.kotlin_1728_2_1.model.utils.BUNDLE_KEY_WEATHER
@@ -80,6 +81,13 @@ class MainActivity : AppCompatActivity() {
             R.id.menu_history -> {
                 supportFragmentManager.beginTransaction()
                     .add(R.id.container, HistoryFragment.newInstance())
+                    .addToBackStack("")
+                    .commit()
+                true
+            }
+            R.id.menu_content-> {
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.container, ContentProviderFragment.newInstance())
                     .addToBackStack("")
                     .commit()
                 true
