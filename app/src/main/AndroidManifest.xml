@@ -46,6 +46,12 @@
             android:exported="true">
 
         </activity>
+        
+        <provider
+            android:authorities="@string/authorities"
+            android:name=".lesson9.EducationContentProvider"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>
