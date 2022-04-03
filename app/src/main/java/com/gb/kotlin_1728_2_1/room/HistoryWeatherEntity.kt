@@ -10,13 +10,12 @@ const val FEELS_LIKE = "FEELS_LIKE"
 const val ICON = "ICON"
 
 
-
 @Entity(tableName = "history_weather_entity")  //общепринятые правила названия файлов таблиц
 data class HistoryWeatherEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Long,
-    val cityName: String,
-    val temperature: Int,
-    val feelsLike: Int,
-    val icon: String
+    val id: Long = 0,
+    val cityName: String = "",
+    val temperature: Int = 0,
+    val feelsLike: Int = 0,
+    val icon: String = ""
 )

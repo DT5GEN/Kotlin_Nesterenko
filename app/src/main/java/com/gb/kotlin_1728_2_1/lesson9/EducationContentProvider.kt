@@ -1,6 +1,7 @@
 package com.gb.kotlin_1728_2_1.lesson9
 
 import android.content.ContentProvider
+import android.content.ContentUris
 import android.content.ContentValues
 import android.content.UriMatcher
 import android.database.Cursor
@@ -56,19 +57,24 @@ class EducationContentProvider : ContentProvider() {
     }
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
-        if (uriMatcher.match(uri) == URI_ALL) {
+        if (uriMatcher.match(uri) == URI_ALL) {  // TODO возможен баг
             val historyWeatherDAO = getHistoryWeatherDAO()
+            val entity = mapper(values)
+            historyWeatherDAO.insert(entity)
+           val resultUri = ContentUris.withAppendedId(contentUri, entity.id)
+            context?.contentResolver?.notifyChange(resultUri, null)
+            return resultUri
         }
     }
 
-    fun mapper(values: ContentValues?): HistoryWeatherEntity {
+    private fun mapper(values: ContentValues?): HistoryWeatherEntity {
         values?.let {
-            val id = values[ID]
-            val name = values[NAME]
-            val temperature = values[TEMPERATURE]
-            return HistoryWeatherEntity()
+            val id = values[ID] as Long
+            val name = values[NAME] as String
+            val temperature = values[TEMPERATURE] as Int
+            return HistoryWeatherEntity(id,name,temperature)
         }
-
+        return HistoryWeatherEntity()
     }
 
     override fun delete(p0: Uri, p1: String?, p2: Array<out String>?): Int {
