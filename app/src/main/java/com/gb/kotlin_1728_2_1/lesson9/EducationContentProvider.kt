@@ -56,15 +56,15 @@ class EducationContentProvider : ContentProvider() {
         TODO("Not yet implemented")
     }
 
-    override fun insert(uri: Uri, values: ContentValues?): Uri? {
-        if (uriMatcher.match(uri) == URI_ALL) {  // TODO возможен баг
+    override fun insert(uri: Uri, values: ContentValues?): Uri {
+
             val historyWeatherDAO = getHistoryWeatherDAO()
             val entity = mapper(values)
             historyWeatherDAO.insert(entity)
            val resultUri = ContentUris.withAppendedId(contentUri, entity.id)
             context?.contentResolver?.notifyChange(resultUri, null)
             return resultUri
-        }
+
     }
 
     private fun mapper(values: ContentValues?): HistoryWeatherEntity {
