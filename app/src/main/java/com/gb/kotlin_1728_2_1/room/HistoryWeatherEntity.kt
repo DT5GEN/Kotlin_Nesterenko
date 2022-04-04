@@ -17,5 +17,6 @@ data class HistoryWeatherEntity(
     val cityName: String = "",
     val temperature: Int = 0,
     val feelsLike: Int = 0,
-    val icon: String = ""
+       val icon: String = ""
+
 )
