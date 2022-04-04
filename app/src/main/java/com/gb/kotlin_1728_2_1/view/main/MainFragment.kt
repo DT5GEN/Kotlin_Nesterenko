@@ -1,15 +1,18 @@
 package com.gb.kotlin_1728_2_1.view.main
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
-import android.provider.Settings.Global.getString
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -70,11 +73,10 @@ class MainFragment : Fragment(), OnMyItemClickListener {
                 sentRequest()
             }
         }
-            mainFragmentFABLocation.setOnClickListener {
-                checkPermission()
-            }
+        mainFragmentFABLocation.setOnClickListener {
+            checkPermission()
         }
-
+    }
 
 
     private fun checkPermission() {
@@ -88,7 +90,7 @@ class MainFragment : Fragment(), OnMyItemClickListener {
                 }
 
                 shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
-                    showDialog()
+                    showDialogRationalisation()
                 }
                 else -> {
                     myRequestPermission()
@@ -97,10 +99,70 @@ class MainFragment : Fragment(), OnMyItemClickListener {
         }
     }
 
-    private fun getLocation(){
+
+    private val MIN_DISTANCE = 100f
+    private val REFRESH_PERIOD = 60000L
+
+    private val listenerLocation = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            getAddress(location)
+        }
+
+        override fun onProviderDisabled(provider: String) {
+            super.onProviderDisabled(provider)
+        }
+
+        override fun onProviderEnabled(provider: String) {
+            super.onProviderEnabled(provider)
+        }
 
     }
 
+    private fun getAddress(location: Location) {
+        Log.d("loc", "getAddress() called with: location = $location")
+
+        Thread {
+            val geocoder = Geocoder(requireContext())
+            val listAddress = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+        }.start()
+    }
+
+    private fun getLocation() {
+        activity?.let {
+            if (ContextCompat.checkSelfPermission(  // обязательная проверка пермишинсов
+                    it,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                val locationManager =
+                    it.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    val providerGPS = locationManager.getProvider(LocationManager.GPS_PROVIDER)
+                    providerGPS?.let {
+                        locationManager.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            REFRESH_PERIOD,
+                            MIN_DISTANCE,
+                            listenerLocation
+                        )
+                    }
+
+                } else {
+                    val lastLocation =
+                        locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                    lastLocation?.let {
+                        getAddress(it)
+                    }
+                }
+            }
+        }
+
+    }
+
+
+    private fun showDialogLocation() {
+
+    }
 
     val REQUEST_CODE = 999
     private fun myRequestPermission() {
@@ -121,7 +183,7 @@ class MainFragment : Fragment(), OnMyItemClickListener {
                     getLocation()
                 }
                 shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
-                    showDialog()
+                    showDialogRationalisation()
                 }
                 else -> {
                     Log.d(
@@ -135,7 +197,7 @@ class MainFragment : Fragment(), OnMyItemClickListener {
     }
 
 
-    private fun showDialog() {
+    private fun showDialogRationalisation() {
         AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.dialog_rationale_title))
             .setMessage(getString(R.string.dialog_message_no_gps))
@@ -167,7 +229,7 @@ class MainFragment : Fragment(), OnMyItemClickListener {
             when (appState) {
                 is AppState.Error -> {
                     mainFragmentLoadingLayout.visibility = View.GONE
-                    root.errorHandling(getString(R.string.errors),Snackbar.LENGTH_LONG)
+                    root.errorHandling(getString(R.string.errors), Snackbar.LENGTH_LONG)
                 }
 
                 is AppState.Loading -> {
@@ -183,15 +245,15 @@ class MainFragment : Fragment(), OnMyItemClickListener {
         }
     }
 
-    fun View.errorHandling(text:String, length: Int){
-        Snackbar.make(this,text, length )
+    fun View.errorHandling(text: String, length: Int) {
+        Snackbar.make(this, text, length)
             .setAction(context.getString(R.string.repeat_request)) {
                 sentRequest()
             }.show()
     }
 
-    private fun View.withoutAction(text:String, length: Int){
-        Snackbar.make(this,text, length ).show()
+    private fun View.withoutAction(text: String, length: Int) {
+        Snackbar.make(this, text, length).show()
     }
 
 
