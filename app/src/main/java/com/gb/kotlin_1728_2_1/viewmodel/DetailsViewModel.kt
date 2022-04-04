@@ -21,7 +21,10 @@ private val repositoryLocalImpl: RepositoryLocalImpl = RepositoryLocalImpl()
     fun getLivedata() = liveData
 
     fun saveWeather(weather: Weather){
-repositoryLocalImpl.saveWeather(weather)
+        Thread{
+            repositoryLocalImpl.saveWeather(weather)
+        }.start()
+
     }
 
     fun getWeatherFromRemoteServer(lat:Double, lon:Double) {

@@ -19,6 +19,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.gb.kotlin_1728_2_1.R
 import com.gb.kotlin_1728_2_1.databinding.FragmentMainBinding
+import com.gb.kotlin_1728_2_1.model.City
 import com.gb.kotlin_1728_2_1.model.Weather
 import com.gb.kotlin_1728_2_1.model.utils.BUNDLE_KEY
 import com.gb.kotlin_1728_2_1.view.details.DetailsFragment
@@ -118,12 +119,31 @@ class MainFragment : Fragment(), OnMyItemClickListener {
 
     }
 
+    private fun showAddressDialog(address: String, location: Location) {
+        address.let {
+            AlertDialog.Builder(requireContext())
+                .setTitle(getString(R.string.dialog_rationale_title))
+                .setMessage(address)
+                .setPositiveButton(getString(R.string.dialog_address_get_weather)) { _, _ ->
+                    toDetails(Weather(City(address, location.latitude, location.longitude)))
+                }
+
+                .setNegativeButton(getString(R.string.dialog_rationale_decline)) { dialog, _ -> dialog.dismiss() }
+                .create()
+                .show()
+        }
+    }
+
     private fun getAddress(location: Location) {
         Log.d("loc", "getAddress() called with: location = $location")
 
         Thread {
-            val geocoder = Geocoder(requireContext())
+            val geocoder =
+                Geocoder(requireContext())  // Geocoder - библиотека/инструмент , который по координатам проверяет в базе список ближайших адресов
             val listAddress = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+            requireActivity().runOnUiThread {
+                showAddressDialog(listAddress[0].getAddressLine(0), location)
+            }
         }.start()
     }
 
@@ -269,6 +289,10 @@ class MainFragment : Fragment(), OnMyItemClickListener {
     }
 
     override fun onItemClick(weather: Weather) {
+        toDetails(weather)
+    }
+
+    private fun toDetails(weather: Weather) {
         activity?.run {
             // создаём контейнер, в который в котором будут данные передаваться и в него помещаем
             // погоду по ключу
