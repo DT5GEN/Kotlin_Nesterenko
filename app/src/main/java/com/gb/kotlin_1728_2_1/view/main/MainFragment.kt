@@ -1,9 +1,16 @@
 package com.gb.kotlin_1728_2_1.view.main
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.Settings.Global.getString
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,6 +22,7 @@ import com.gb.kotlin_1728_2_1.view.details.DetailsFragment
 import com.gb.kotlin_1728_2_1.viewmodel.AppState
 import com.gb.kotlin_1728_2_1.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : Fragment(), OnMyItemClickListener {
 
@@ -62,7 +70,83 @@ class MainFragment : Fragment(), OnMyItemClickListener {
                 sentRequest()
             }
         }
+            mainFragmentFABLocation.setOnClickListener {
+                checkPermission()
+            }
+        }
+
+
+
+    private fun checkPermission() {
+        context?.let {
+            when {
+                ContextCompat.checkSelfPermission(
+                    it,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED -> {
+                    getLocation()
+                }
+
+                shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
+                    showDialog()
+                }
+                else -> {
+                    myRequestPermission()
+                }
+            }
+        }
     }
+
+    private fun getLocation(){
+
+    }
+
+
+    val REQUEST_CODE = 999
+    private fun myRequestPermission() {
+        requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
+
+    }
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        // super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE) {
+            when {
+                (grantResults[0] == PackageManager.PERMISSION_GRANTED) -> {
+                    getLocation()
+                }
+                shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
+                    showDialog()
+                }
+                else -> {
+                    Log.d(
+                        "TAG",
+                        "onRequestPermissionsResult() called with: requestCode = $requestCode, permissions = $permissions, grantResults = $grantResults"
+                    )
+                }
+            }
+        }
+
+    }
+
+
+    private fun showDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.dialog_rationale_title))
+            .setMessage(getString(R.string.dialog_message_no_gps))
+            .setPositiveButton(getString(R.string.dialog_rationale_give_access)) { _, _ ->
+                myRequestPermission()
+            }
+            .setNegativeButton(getString(R.string.dialog_rationale_decline)) { dialog, _ -> dialog.dismiss() }
+            .create()
+            .show()
+    }
+
 
     private fun sentRequest() {
         isRussian = !isRussian // isRussian = if(isRussian) false else true
