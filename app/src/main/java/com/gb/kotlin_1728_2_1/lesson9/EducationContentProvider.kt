@@ -69,9 +69,9 @@ class EducationContentProvider : ContentProvider() {
 
     private fun mapper(values: ContentValues?): HistoryWeatherEntity {
         values?.let {
-            val id = values[ID] as Long
-            val name = values[NAME] as String
-            val temperature = values[TEMPERATURE] as Int
+            var id = values[ID] as Long
+            var name = values[NAME] as String
+            var temperature = values[TEMPERATURE] as Int
             return HistoryWeatherEntity(id,name,temperature)
         }
         return HistoryWeatherEntity()
