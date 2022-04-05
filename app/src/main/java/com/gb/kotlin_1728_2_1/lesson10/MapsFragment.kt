@@ -2,16 +2,14 @@ package com.gb.kotlin_1728_2_1.lesson10
 
 import android.graphics.Color
 import android.location.Geocoder
-import androidx.fragment.app.Fragment
-
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.gb.kotlin_1728_2_1.R
 import com.gb.kotlin_1728_2_1.databinding.FragmentGoogleMapsMainBinding
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback

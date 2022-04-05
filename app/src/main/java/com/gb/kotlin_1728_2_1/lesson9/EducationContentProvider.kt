@@ -58,12 +58,12 @@ class EducationContentProvider : ContentProvider() {
 
     override fun insert(uri: Uri, values: ContentValues?): Uri {
 
-            val historyWeatherDAO = getHistoryWeatherDAO()
-            val entity = mapper(values)
-            historyWeatherDAO.insert(entity)
-           val resultUri = ContentUris.withAppendedId(contentUri, entity.id)
-            context?.contentResolver?.notifyChange(resultUri, null)
-            return resultUri
+        val historyWeatherDAO = getHistoryWeatherDAO()
+        val entity = mapper(values)
+        historyWeatherDAO.insert(entity)
+        val resultUri = ContentUris.withAppendedId(contentUri, entity.id)
+        context?.contentResolver?.notifyChange(resultUri, null)
+        return resultUri
 
     }
 
@@ -72,7 +72,7 @@ class EducationContentProvider : ContentProvider() {
             var id = values[ID] as Long
             var name = values[NAME] as String
             var temperature = values[TEMPERATURE] as Int
-            return HistoryWeatherEntity(id,name,temperature)
+            return HistoryWeatherEntity(id, name, temperature)
         }
         return HistoryWeatherEntity()
     }
