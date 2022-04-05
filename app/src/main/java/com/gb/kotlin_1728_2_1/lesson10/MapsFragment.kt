@@ -49,7 +49,7 @@ class MapsFragment : Fragment() {
 
         }
         googleMap.setOnMapLongClickListener {
-
+            showWeatherTouch()
 
         }
 
@@ -59,9 +59,9 @@ class MapsFragment : Fragment() {
 
     }
 
-//    private fun showWeatherTouch(){
-//        toDetails
-//    }
+    private fun showWeatherTouch(){  // TODO найти способ передать данные в DetailsFragment о погодев выбранном месте на карте
+       // toDetails
+    }
 
     private fun drawLine() {
         val lastIndex = markers.size
