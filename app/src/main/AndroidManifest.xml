@@ -52,7 +52,7 @@
             android:exported="true"></receiver>
 
         <activity
-            android:name=".lesson_5.MainActivityWebView"
+            android:name=".lesson5.MainActivityWebView"
             android:exported="true"></activity>
 
         <provider

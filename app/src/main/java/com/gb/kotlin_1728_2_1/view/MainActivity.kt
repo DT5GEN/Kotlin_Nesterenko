@@ -1,12 +1,17 @@
 package com.gb.kotlin_1728_2_1.view
 
 import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.os.Build
+import android.os.Build.VERSION_CODES.O
 import android.os.Bundle
 import android.preference.PreferenceManager.getDefaultSharedPreferences
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
 import com.gb.kotlin_1728_2_1.R
 import com.gb.kotlin_1728_2_1.databinding.ActivityMainBinding
 import com.gb.kotlin_1728_2_1.lesson10.MapsFragment
@@ -24,46 +29,77 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     private val receiver = MyBroadcastReceiver()
 
+    companion object {
+        private const val NOTIFICATION_ID_1 = 1
+        private const val NOTIFICATION_ID_2 = 2
+        private const val CHANNEL_ID_1 = "channel_id_1"
+        private const val CHANNEL_ID_2 = "channel_id_2"
+    }
+
+    private fun pushNotification() {
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationBuilder_1 = NotificationCompat.Builder(this, CHANNEL_ID_1)
+            .apply {
+                setSmallIcon(R.drawable.ic_kotlin_logo)
+                setContentTitle("Заголовок для $CHANNEL_ID_1")
+                setContentText("Сообщение для $CHANNEL_ID_1")
+                priority = NotificationCompat.PRIORITY_MAX
+            }
+        val notificationBuilder_2 = NotificationCompat.Builder(this, CHANNEL_ID_2)
+            .apply {
+                setSmallIcon(R.drawable.ic_kotlin_logo)
+                setContentTitle("Заголовок для $CHANNEL_ID_2")
+                setContentText("Сообщение для $CHANNEL_ID_2")
+                priority = NotificationCompat.PRIORITY_MAX
+            }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channelName_1 = "Name for $CHANNEL_ID_1"
+            val channelDescription_1 = "Descriptoin $CHANNEL_ID_1"
+            val channelPriority =
+                NotificationManager.IMPORTANCE_HIGH  // не ставить приоритет MAX, так как это только для системных уведомлений работает
+            val channel_1 = NotificationChannel(
+                CHANNEL_ID_1,
+                channelName_1,
+                channelPriority
+            ).apply { description = channelDescription_1 }
+            notificationManager.createNotificationChannel(channel_1)
+
+
+        }
+notificationManager.notify(NOTIFICATION_ID_1, notificationBuilder_1.build())
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channelName_2 = "Name for $CHANNEL_ID_2"
+            val channelDescription_2 = "Descriptoin $CHANNEL_ID_1"
+            val channelPriority =
+                NotificationManager.IMPORTANCE_HIGH  // не ставить приоритет MAX, так как это только для системных уведомлений работает
+            val channel_2 = NotificationChannel(
+                CHANNEL_ID_2,
+                channelName_2,
+                channelPriority
+            ).apply { description = channelDescription_2 }
+            notificationManager.createNotificationChannel(channel_2)
+
+
+        }
+
+notificationManager.notify(NOTIFICATION_ID_2, notificationBuilder_2.build())
+
+    }
+
     @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        if (intent.getParcelableExtra<WeatherDTO>(BUNDLE_KEY_WEATHER) != null) {  // TODO разобраться что тут
-            supportFragmentManager.beginTransaction()
-                .add(
-                    R.id.container,
-                    DetailsFragment.newInstance(
-                        Bundle().apply {
-                            putParcelable(
-                                BUNDLE_KEY, intent.getParcelableExtra<WeatherDTO>(
-                                    BUNDLE_KEY_WEATHER
-                                )
-                            )
-                        }
-                    ))
-                .addToBackStack("").commit()
-        }
+        pushNotification()
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, MainFragment.newInstance()).commit()
         }
 
-        val sharedPref =
-            getSharedPreferences("", Context.MODE_PRIVATE) // на уровне приложения по ТЕГу
-
-        val activityPref = getPreferences(Context.MODE_PRIVATE)  // работает на уровне активити
-
-        val appPreference = getDefaultSharedPreferences(this)
-
-        appPreference.getString("key", "")
-
-        val editor = appPreference.edit().putString("key", "valueAny")
-        editor.putString("key", "valueAny")
-        editor.putString("key2", "valueAny")
-        editor.putInt("key3", 777)
-        editor.putBoolean("key4", false)
-        editor.apply()
 
     }
 
@@ -86,14 +122,14 @@ class MainActivity : AppCompatActivity() {
                     .commit()
                 true
             }
-            R.id.menu_content-> {
+            R.id.menu_content -> {
                 supportFragmentManager.beginTransaction()
                     .add(R.id.container, ContentProviderFragment.newInstance())
                     .addToBackStack("")
                     .commit()
                 true
             }
-            R.id.menu_google_maps-> {
+            R.id.menu_google_maps -> {
                 supportFragmentManager.beginTransaction()
                     .add(R.id.container, MapsFragment())
                     .addToBackStack("")

@@ -1,4 +1,4 @@
-package com.gb.kotlin_1728_2_1.lesson_5
+package com.gb.kotlin_1728_2_1.lesson5
 
 import android.os.Bundle
 import android.os.Handler
