@@ -32,8 +32,8 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val NOTIFICATION_ID_1 = 1
         private const val NOTIFICATION_ID_2 = 2
-        private const val CHANNEL_ID_1 = "channel_id_1"
-        private const val CHANNEL_ID_2 = "channel_id_2"
+        private const val CHANNEL_ID_1 = "Известия "
+        private const val CHANNEL_ID_2 = "Котлин покажет. "
     }
 
     private fun pushNotification() {
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
                 setSmallIcon(R.drawable.ic_kotlin_logo)
                 setContentTitle("Заголовок для $CHANNEL_ID_2")
                 setContentText("Сообщение для $CHANNEL_ID_2")
-                priority = NotificationCompat.PRIORITY_MAX
+                priority = NotificationCompat.PRIORITY_MAX // Если не указать, будет дефолтное значение
             }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -80,12 +80,17 @@ notificationManager.notify(NOTIFICATION_ID_1, notificationBuilder_1.build())
                 channelName_2,
                 channelPriority
             ).apply { description = channelDescription_2 }
-            notificationManager.createNotificationChannel(channel_2)
-
+                notificationManager.createNotificationChannel(channel_2)
+             //notificationManager.deleteNotificationChannel(CHANNEL_ID_2) // удаление 2-го канала уведомлений
 
         }
 
 notificationManager.notify(NOTIFICATION_ID_2, notificationBuilder_2.build())
+notificationManager.notify(NOTIFICATION_ID_2+1, notificationBuilder_2.build())
+notificationManager.notify(NOTIFICATION_ID_2+2, notificationBuilder_2.build())
+notificationManager.notify(NOTIFICATION_ID_2+3, notificationBuilder_2.build())
+notificationManager.notify(NOTIFICATION_ID_2+4, notificationBuilder_2.build())
+notificationManager.notify(NOTIFICATION_ID_2+5, notificationBuilder_2.build())
 
     }
 
@@ -94,12 +99,13 @@ notificationManager.notify(NOTIFICATION_ID_2, notificationBuilder_2.build())
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        pushNotification()
+        pushNotification() // вызываем созданные уведомления
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, MainFragment.newInstance()).commit()
         }
 
+        Build.VERSION_CODES.O // так можно узнать версию андроид O
 
     }
 

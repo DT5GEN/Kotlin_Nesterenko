@@ -147,7 +147,7 @@ class MainFragment : Fragment(), OnMyItemClickListener {
         }.start()
     }
 
-    private fun getLocation() {
+    public fun getLocation() {
         activity?.let {
             if (ContextCompat.checkSelfPermission(  // обязательная проверка пермишинсов
                     it,
@@ -292,7 +292,7 @@ class MainFragment : Fragment(), OnMyItemClickListener {
         toDetails(weather)
     }
 
-    private fun toDetails(weather: Weather) {
+    fun toDetails(weather: Weather) {
         activity?.run {
             // создаём контейнер, в который в котором будут данные передаваться и в него помещаем
             // погоду по ключу

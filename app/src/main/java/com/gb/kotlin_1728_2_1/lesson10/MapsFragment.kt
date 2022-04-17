@@ -1,15 +1,21 @@
 package com.gb.kotlin_1728_2_1.lesson10
 
+import com.gb.kotlin_1728_2_1.model.Weather
 import android.graphics.Color
 import android.location.Geocoder
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.motion.widget.Debug.getLocation
 import androidx.fragment.app.Fragment
 import com.gb.kotlin_1728_2_1.R
 import com.gb.kotlin_1728_2_1.databinding.FragmentGoogleMapsMainBinding
+import com.gb.kotlin_1728_2_1.model.City
+import com.gb.kotlin_1728_2_1.model.utils.BUNDLE_KEY
+import com.gb.kotlin_1728_2_1.view.details.DetailsFragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -47,7 +53,11 @@ class MapsFragment : Fragment() {
 
         }
         googleMap.setOnMapLongClickListener {
-            showWeatherTouch()
+            //showWeatherTouch()
+           // getLocation() // как - то перенёс
+            val tochAdres = getAddress(it)
+         //   val lat =
+           // toDetailWeatherOnMap(Weather(City(address, location.latitude, location.longitude)))
 
         }
 
@@ -57,9 +67,6 @@ class MapsFragment : Fragment() {
 
     }
 
-    private fun showWeatherTouch(){  // TODO найти способ передать данные в DetailsFragment о погодев выбранном месте на карте
-       // toDetails
-    }
 
     private fun drawLine() {
         val lastIndex = markers.size
@@ -83,6 +90,35 @@ class MapsFragment : Fragment() {
         )
         markers.add(marker!!)
     }
+
+    private fun showWeatherTouch(address2: String, location: Location) {  // TODO найти способ передать данные в DetailsFragment о погодев выбранном месте на карте
+        Thread {
+            val geocoder =
+                Geocoder(requireContext())  // Geocoder - библиотека/инструмент , который по координатам проверяет в базе список ближайших адресов
+            val listAddress = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+            requireActivity().runOnUiThread {
+               // address2 = listAddress[0].getAddressLine(0).toString()
+            }
+        }.start()
+    }
+
+
+    private fun getAddress2(location: LatLng) {
+        Log.d("loc", "getAddress() called with: location = $location")
+
+        Thread {
+            val geocoder =
+                Geocoder(requireContext())  // Geocoder - библиотека/инструмент , который по координатам проверяет в базе список ближайших адресов
+            val listAddress = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+            requireActivity().runOnUiThread {
+                binding.textAddress.text = listAddress[0].getAddressLine(0)
+
+                
+            }
+        }.start()
+    }
+
+
 
     private fun getAddress(location: LatLng) {
         Log.d("loc", "getAddress() called with: location = $location")
@@ -143,4 +179,18 @@ class MapsFragment : Fragment() {
             }
         }.start()
     }
+
+    private fun toDetailWeatherOnMap (weather: Weather){
+        activity?.run {
+            // создаём контейнер, в который в котором будут данные передаваться и в него помещаем
+            // погоду по ключу
+            supportFragmentManager.beginTransaction()
+                .add(R.id.container, DetailsFragment.newInstance(Bundle().apply {
+                    putParcelable(BUNDLE_KEY, weather)
+                }))
+                .addToBackStack("")
+                .commit()
+        }
+    }
+
 }
