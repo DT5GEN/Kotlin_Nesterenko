@@ -2,6 +2,9 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    id 'com.google.gms.google-services'
+
+
 }
 
 apply plugin: 'kotlin-android-extensions'
@@ -9,8 +12,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     namespace 'com.gb.kotlin_1728_2_1'
-    compileSdk 32
-
+    compileSdk 31
     buildFeatures {
         viewBinding true
     }
@@ -40,7 +42,7 @@ android {
     defaultConfig {
         applicationId "com.gb.kotlin_1728_2_1"
         minSdk 28
-        targetSdk 32
+        targetSdk 31
         versionCode 1
         versionName "1.0"
 
@@ -63,7 +65,7 @@ compileOptions {
 kotlinOptions {
     jvmTarget = '1.8'
 }
-}
+    }
 
 dependencies {
     // Vector - SVG
@@ -73,6 +75,7 @@ dependencies {
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.0.3'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
     // Picasso
