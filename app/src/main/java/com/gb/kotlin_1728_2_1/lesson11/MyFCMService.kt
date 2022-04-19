@@ -19,8 +19,8 @@ class MyFCMService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) { // получаем с сервера сообщение
         val data = message.data.toMap()
         if (data.isNotEmpty()) {  // проверяем не пустое ли
-            val title = data["myTitle"]  // по ключам добываем значения
-            val message = data["myMessage"]
+            val title = data[KEY_TITLE]  // по ключам добываем значения
+            val message = data[KEY_MESSAGE]
             if (!title.isNullOrBlank() && !message.isNullOrBlank())
                 pushNotification(title, message)  // и выводим их  в нотификацию
         }
@@ -32,6 +32,8 @@ class MyFCMService : FirebaseMessagingService() {
         private const val NOTIFICATION_ID_1 = 1
 
         private const val CHANNEL_ID_1 = "Известия "
+        private const val KEY_TITLE = "myTitle"
+        private const val KEY_MESSAGE = "myMessage"
 
     }
 
