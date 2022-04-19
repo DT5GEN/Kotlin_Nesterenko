@@ -49,6 +49,14 @@ android {
     }
 
     buildTypes {
+
+        my_test {
+            initWith debug // команда наследования от дебажной сборки - принимает ключ приложения сгенерированный студией
+            //shrinkResources false // обрезает неиспользуемые ресурсы
+            minifyEnabled true  // ProGuard вкл , если true - сокращает переменные с длинного наименования переменных на
+                                 // короткое (notificationManager -> n1 ), стараясь сократить размер кода и частично защищает от понимания реверсинженеров
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
