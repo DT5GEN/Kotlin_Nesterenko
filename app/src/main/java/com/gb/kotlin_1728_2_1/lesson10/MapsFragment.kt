@@ -1,6 +1,5 @@
 package com.gb.kotlin_1728_2_1.lesson10
 
-import com.gb.kotlin_1728_2_1.model.Weather
 import android.graphics.Color
 import android.location.Geocoder
 import android.location.Location
@@ -9,11 +8,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.motion.widget.Debug.getLocation
 import androidx.fragment.app.Fragment
 import com.gb.kotlin_1728_2_1.R
 import com.gb.kotlin_1728_2_1.databinding.FragmentGoogleMapsMainBinding
-import com.gb.kotlin_1728_2_1.model.City
+import com.gb.kotlin_1728_2_1.model.Weather
 import com.gb.kotlin_1728_2_1.model.utils.BUNDLE_KEY
 import com.gb.kotlin_1728_2_1.view.details.DetailsFragment
 import com.google.android.gms.maps.CameraUpdateFactory

@@ -26,4 +26,5 @@
     <string name="success">Success</string>
     <string name="errors">Ошибка</string>
     <string name="repeat_request">Повторить запрос?</string>
+    <string name="msg_token_fmt">" "</string>
 </resources>

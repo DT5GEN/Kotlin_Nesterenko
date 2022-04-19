@@ -5,9 +5,8 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
-import android.os.Build.VERSION_CODES.O
 import android.os.Bundle
-import android.preference.PreferenceManager.getDefaultSharedPreferences
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -17,12 +16,10 @@ import com.gb.kotlin_1728_2_1.databinding.ActivityMainBinding
 import com.gb.kotlin_1728_2_1.lesson10.MapsFragment
 import com.gb.kotlin_1728_2_1.lesson6.MyBroadcastReceiver
 import com.gb.kotlin_1728_2_1.lesson9.ContentProviderFragment
-import com.gb.kotlin_1728_2_1.model.WeatherDTO
-import com.gb.kotlin_1728_2_1.model.utils.BUNDLE_KEY
-import com.gb.kotlin_1728_2_1.model.utils.BUNDLE_KEY_WEATHER
-import com.gb.kotlin_1728_2_1.view.details.DetailsFragment
 import com.gb.kotlin_1728_2_1.view.history.HistoryFragment
 import com.gb.kotlin_1728_2_1.view.main.MainFragment
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : AppCompatActivity() {
 
@@ -99,13 +96,30 @@ notificationManager.notify(NOTIFICATION_ID_2+5, notificationBuilder_2.build())
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        pushNotification() // вызываем созданные уведомления
+        // pushNotification() // вызываем созданные уведомления
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, MainFragment.newInstance()).commit()
         }
 
         Build.VERSION_CODES.O // так можно узнать версию андроид O
+
+        // способ получить токен в любом случае
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful){
+                Log.w("TAG_push", "Fetching FCM registration token failed ", task.exception )
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+            Log.d("TAG_push", "token = $token")
+
+            //Log and toast
+            /* val msg = getString(R.string.msg_token_fmt, token)
+
+            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show() */
+        })
 
     }
 
