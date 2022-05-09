@@ -70,6 +70,7 @@ fun countLetters(str: String): String {
  * Sample Input ["eat", "tea", "tan", "ate", "nat", "bat"]
  * Sample Output [ ["ate", "tea", "eat"], ["nat", "tan"], ["bat"] ]
  * Сгруппировать по "общим буквам"
+ * https://www.youtube.com/watch?v=30tchn0TjaM
  */
 
 fun groupWords (words: Array<String>): List<List<String>>{
